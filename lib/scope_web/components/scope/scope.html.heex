@@ -1,0 +1,77 @@
+<div class="h-full">
+  <main class="h-full">
+    <section class="window" id="mainWindow" phx-hook="Draggable">
+      <div class="window-header draggable" id="windowHeader">
+        <form class="node-form" phx-change="update_node">
+          <input
+            type="text"
+            name="node"
+            value={@node}
+            placeholder="Ej: node@localhost"
+            class="node-input"
+            phx-debounce="300"
+          />
+        </form>
+      </div>
+      
+      <section class="">
+        <table class="process-table">
+          <thead>
+            <tr>
+              <th>PID</th>
+              
+              <th>Name</th>
+              
+              <th>Reductions</th>
+            </tr>
+          </thead>
+          
+          <tbody>
+            <%= for {pid, info} <- @processes do %>
+              <tr>
+                <td>{format_pid(pid, @selected_pid)}</td>
+                
+                <td>{info[:registered_name] || ""}</td>
+                
+                <td>{info[:reductions]}</td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </section>
+    </section>
+    
+    <%= for pid <- @windows do %>
+      <section class="window" id={"window-" <> pid} phx-hook="Draggable">
+        <div class="window-header draggable" id={"window-header-" <> pid}>
+          {format_pid(pid_from_str(pid), @selected_pid)}
+        </div>
+        
+        <section class="">
+          <table class="process-table">
+            <thead>
+              <tr>
+                <th>Prop</th>
+                
+                <th>Value</th>
+              </tr>
+            </thead>
+            
+            <tbody>
+              {render_pid_info(@processes, pid_from_str(pid), @selected_pid)}
+            </tbody>
+          </table>
+        </section>
+      </section>
+    <% end %>
+    
+<!-- Panel derecho: detalles -->
+    <%!-- <section class="process-details-section md:w-1/2 text-white p-4 overflow-auto">
+      <%= if @selected_pid do %>
+        <h2 class="text-xl font-bold mb-4">Process &lt;{@selected_pid}&gt;</h2>
+      <% else %>
+        <p class="italic text-gray-400">Select process</p>
+      <% end %>
+    </section> --%>
+  </main>
+</div>
