@@ -3,6 +3,7 @@
 To start the server, run the following command in your terminal:
 
 ```bash
+mix deps.get
 elixir --name scope@127.0.0.1 --cookie asdf -S mix phx.server
 ```
 
