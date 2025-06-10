@@ -19,7 +19,7 @@ defmodule ScopeWeb.Scope do
   def handle_event("update_node", %{"node" => node}, socket) do
     status = String.contains?(node, "@") and Node.connect(String.to_atom(node))
 
-    {:noreply, assign(socket, node: node, status: status)}
+    {:noreply, assign(socket, node: node, status: status, windows: MapSet.new())}
   end
 
   def handle_event("select_pid", %{"pid" => pid}, socket) do
